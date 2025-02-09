@@ -8,5 +8,7 @@ builder.ConfigureAmazonSqsService(config);
 builder.ConfigureDbContext();
 builder.ConfigureServices();
 
+builder.Services.AddHostedService<WorkerService.Worker>();
+
 var app = builder.Build();
 app.Run();
