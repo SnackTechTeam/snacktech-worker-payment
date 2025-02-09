@@ -5,6 +5,7 @@ using WorkerService.Data.Entities;
 using WorkerService.Data.Repository;
 using WorkerService.DTOs;
 using WorkerService.Handlers;
+using Microsoft.Extensions.Logging;
 
 namespace WorkerService.Tests.Handlers
 {
@@ -16,22 +17,23 @@ namespace WorkerService.Tests.Handlers
         public PagamentoHandlerTests()
         {
             _pedidoRepositoryMock = new Mock<IPedidoRepository>();
-            _pagamentoHandler = new PagamentoHandler(_pedidoRepositoryMock.Object);
+            var loggerMock = new Mock<ILogger<PagamentoHandler>>();
+            _pagamentoHandler = new PagamentoHandler(loggerMock.Object, _pedidoRepositoryMock.Object);
         }
 
         [Fact]
-        public async Task ProcessarAsync_PedidoNotFound_ThrowsInvalidOperationException()
+        public async Task ProcessarAsync_PedidoNotFound_ReturnFalse()
         {
             // Arrange
             var mensagem = new MensagemPagamentoDto { PedidoId = Guid.NewGuid() };
             _pedidoRepositoryMock.Setup(r => r.GetByIdAsync(mensagem.PedidoId)).ReturnsAsync((Pedido)null);
 
             // Act and Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _pagamentoHandler.ProcessarAsync(mensagem));
+            Assert.False(await _pagamentoHandler.ProcessarAsync(mensagem));
         }
 
         [Fact]
-        public async Task ProcessarAsync_PedidoStatusNotAguardandoPagamento_ThrowsInvalidOperationException()
+        public async Task ProcessarAsync_PedidoStatusNotAguardandoPagamento_ReturnFalse()
         {
             // Arrange
             var mensagem = new MensagemPagamentoDto { PedidoId = Guid.NewGuid() };
@@ -39,11 +41,11 @@ namespace WorkerService.Tests.Handlers
             _pedidoRepositoryMock.Setup(r => r.GetByIdAsync(mensagem.PedidoId)).ReturnsAsync(pedido);
 
             // Act and Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _pagamentoHandler.ProcessarAsync(mensagem));
+            Assert.False(await _pagamentoHandler.ProcessarAsync(mensagem));
         }
 
         [Fact]
-        public async Task ProcessarAsync_PedidoPagamentoIdAlreadySet_ThrowsInvalidOperationException()
+        public async Task ProcessarAsync_PedidoPagamentoIdAlreadySet_ReturnFalse()
         {
             // Arrange
             var mensagem = new MensagemPagamentoDto { PedidoId = Guid.NewGuid() };
@@ -51,11 +53,11 @@ namespace WorkerService.Tests.Handlers
             _pedidoRepositoryMock.Setup(r => r.GetByIdAsync(mensagem.PedidoId)).ReturnsAsync(pedido);
 
             // Act and Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _pagamentoHandler.ProcessarAsync(mensagem));
+            Assert.False(await _pagamentoHandler.ProcessarAsync(mensagem));
         }
 
         [Fact]
-        public async Task ProcessarAsync_MensagemDataRecebimentoBeforePedidoDataCriacao_ThrowsInvalidOperationException()
+        public async Task ProcessarAsync_MensagemDataRecebimentoBeforePedidoDataCriacao_ReturnFalse()
         {
             // Arrange
             var mensagem = new MensagemPagamentoDto { PedidoId = Guid.NewGuid(), DataRecebimento = DateTime.Now.AddDays(-1) };
@@ -63,7 +65,7 @@ namespace WorkerService.Tests.Handlers
             _pedidoRepositoryMock.Setup(r => r.GetByIdAsync(mensagem.PedidoId)).ReturnsAsync(pedido);
 
             // Act and Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _pagamentoHandler.ProcessarAsync(mensagem));
+            Assert.False(await _pagamentoHandler.ProcessarAsync(mensagem));
         }
 
         [Fact]
