@@ -26,7 +26,7 @@ namespace WorkerService.Tests.Handlers
         {
             // Arrange
             var mensagem = new MensagemPagamentoDto { PedidoId = Guid.NewGuid() };
-            _pedidoRepositoryMock.Setup(r => r.GetByIdAsync(mensagem.PedidoId)).ReturnsAsync((Pedido)null);
+            _pedidoRepositoryMock.Setup(r => r.GetByIdAsync(mensagem.PedidoId)).ReturnsAsync((Pedido?)null);
 
             // Act and Assert
             Assert.False(await _pagamentoHandler.ProcessarAsync(mensagem));

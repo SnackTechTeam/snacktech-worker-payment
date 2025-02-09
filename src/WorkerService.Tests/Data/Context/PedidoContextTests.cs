@@ -7,7 +7,7 @@ namespace WorkerService.Tests.Data.Context
     public class PedidoContextTests
     {
         [Fact]
-        public async Task PedidoContext_CreateDbContext_OptionsAreConfigured()
+        public void PedidoContext_CreateDbContext_OptionsAreConfigured()
         {
             // Arrange
             var options = new DbContextOptionsBuilder<PedidoContext>()
@@ -22,7 +22,7 @@ namespace WorkerService.Tests.Data.Context
         }
 
         [Fact]
-        public async Task PedidoContext_Pedidos_DbSetIsConfigured()
+        public void PedidoContext_Pedidos_DbSetIsConfigured()
         {
             // Arrange
             var options = new DbContextOptionsBuilder<PedidoContext>()

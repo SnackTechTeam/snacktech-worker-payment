@@ -29,7 +29,7 @@ namespace WorkerService.Configuration.Tests
 
         internal static MockConfigurationBuilder MakeConfigBuilderMock()
         {
-            var inMemorySettings = new Dictionary<string, string> {
+            var inMemorySettings = new Dictionary<string, string?> {
                 {"Aws:QueueURL", "queue.com"},
                 {"Aws:DlqQueueURL", "dlq.com"},
                 {"Aws:RegionEndpoint", "us-west-2"},

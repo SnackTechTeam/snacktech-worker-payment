@@ -39,7 +39,7 @@ namespace WorkerService.Tests.Data.Repository
         public async Task GetByIdAsync_PedidoDoesNotExist_ReturnsNull()
         {
             // Arrange
-            _pedidoDbSetMock.Setup(m => m.FindAsync(It.IsAny<object[]>())).ReturnsAsync((Pedido)null);
+            _pedidoDbSetMock.Setup(m => m.FindAsync(It.IsAny<object[]>())).ReturnsAsync((Pedido?)null);
 
             // Act
             var result = await _repository.GetByIdAsync(Guid.NewGuid());

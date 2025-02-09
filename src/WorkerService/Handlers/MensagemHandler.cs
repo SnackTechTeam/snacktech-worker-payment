@@ -23,14 +23,14 @@ namespace WorkerService.Handlers
         
         public async Task Processar(Message mensagem)
         {
-            logger.LogDebug("Processando mensagem com id: {messageId}", mensagem?.MessageId);
+            logger.LogDebug("Processando mensagem com id: {messageId}", mensagem.MessageId);
 
             try
             {
-                var mensagemDto = JsonSerializer.Deserialize<MensagemPagamentoDto>(mensagem!.Body);
+                var mensagemDto = JsonSerializer.Deserialize<MensagemPagamentoDto>(mensagem.Body);
                 if(mensagemDto == null)
                 {
-                    logger.LogError("Erro ao deserializar mensagem com id: {messageId}", mensagem?.MessageId);
+                    logger.LogError("Erro ao deserializar mensagem com id: {messageId}", mensagem.MessageId);
                     await EnviarParaDlq(mensagem);
                 }
                 else
@@ -40,7 +40,7 @@ namespace WorkerService.Handlers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Erro inesperado ao processar mensagem com id: {messageId} e body: {body}", mensagem?.MessageId, mensagem?.Body);
+                logger.LogError(ex, "Erro inesperado ao processar mensagem com id: {messageId} e body: {body}", mensagem.MessageId, mensagem.Body);
                 await EnviarParaDlq(mensagem);
             }
             finally
@@ -61,8 +61,6 @@ namespace WorkerService.Handlers
 
         private async Task EnviarParaDlq(Message mensagem)
         {
-            if (mensagem == null) return;
-            
             await sqsClient.SendMessageAsync(config.Aws.DlqQueueURL, mensagem.Body);
             logger.LogWarning("Mensagem com id: {messageId} enviada para DLQ {dlqQueueURL}", mensagem.MessageId, config.Aws.DlqQueueURL);
         }
