@@ -1,0 +1,75 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # Define a variable for the solution path
+    - name: Set Solution Path
+      id: set_solution_path
+      run: |
+        # Informar aqui o caminho para o arquivo da solution
+        SOLUTION_PATH="./src/WorkerServiceSolution.sln"
+        echo "SOLUTION_PATH=$SOLUTION_PATH" >> $GITHUB_ENV
+
+    - name: Restore dependencies
+      run: dotnet restore $SOLUTION_PATH
+
+    - name: Build
+      run: dotnet build $SOLUTION_PATH --configuration Release
+
+    - name: Test
+      run: dotnet test $SOLUTION_PATH --configuration Release --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=../TestResults.trx"
+
+    - name: Install ReportGenerator
+      run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+    - name: Generate Coverage Report
+      run: reportgenerator -reports:./**/coverage.cobertura.xml -targetdir:./CoverageReport -reporttypes:Html
+
+    - name: Extract Coverage Percentage
+      id: coverage
+      run: |
+        # Install xmllint if not already installed
+        sudo apt-get update
+        sudo apt-get install -y libxml2-utils bc
+
+        # Find the coverage file
+        coverage_file=$(find . -name "coverage.cobertura.xml" -type f -print -quit)
+        if [ -z "$coverage_file" ]; then
+          echo "Coverage file not found!"
+          exit 1
+        fi
+        echo "Coverage file found: $coverage_file"
+
+        # Extract the 'line-rate' attribute from the root <coverage> element
+        coverage_percentage=$(xmllint --xpath "string(/coverage/@line-rate)" "$coverage_file")
+        if [ -z "$coverage_percentage" ]; then
+          echo "Failed to extract coverage percentage!"
+          exit 1
+        fi
+        echo "Raw Coverage Percentage: $coverage_percentage"
+        coverage_percentage=$(echo "$coverage_percentage * 100" | bc -l)
+        coverage_percentage=$(printf "%.2f" "$coverage_percentage")
+        echo "Coverage Percentage: $coverage_percentage%"
+        echo "coverage_percentage=$coverage_percentage" >> $GITHUB_OUTPUT
+
+    - name: Print Coverage Percentage
+      run: |
+        echo "Coverage Percentage: ${{ steps.coverage.outputs.coverage_percentage }}%"
+
+  ## Adicionar os passos de deploy aqui
