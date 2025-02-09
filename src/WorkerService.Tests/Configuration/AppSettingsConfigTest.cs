@@ -11,20 +11,7 @@ namespace WorkerService.Configuration.Tests
         public void LoadConfiguration_ShouldLoadAwsConfig_WhenValidConfigurationExists()
         {
             // Arrange
-            var inMemorySettings = new Dictionary<string, string> {
-                {"Aws:QueueURL", "queue.com"},
-                {"Aws:DlqQueueURL", "dlq.com"},
-                {"Aws:RegionEndpoint", "us-west-2"},
-                {"Aws:ServiceURL", "https://sqs.us-west-2.amazonaws.com"},
-                {"Aws:AccessKey", "test-access-key"},
-                {"Aws:SecretKey", "test-secret-key"}
-            };
-
-            var configuration = new ConfigurationBuilder()
-                .AddInMemoryCollection(inMemorySettings)
-                .Build();
-
-            var configBuilderMock = new MockConfigurationBuilder(configuration);
+            var configBuilderMock = MakeConfigBuilderMock();
 
             // Act
             var appSettingsConfig = AppSettingsConfig.LoadConfiguration(configBuilderMock);
@@ -40,8 +27,28 @@ namespace WorkerService.Configuration.Tests
             Assert.Equal("test-secret-key", appSettingsConfig.Aws.SecretKey);
         }
 
+        internal static MockConfigurationBuilder MakeConfigBuilderMock()
+        {
+            var inMemorySettings = new Dictionary<string, string> {
+                {"Aws:QueueURL", "queue.com"},
+                {"Aws:DlqQueueURL", "dlq.com"},
+                {"Aws:RegionEndpoint", "us-west-2"},
+                {"Aws:ServiceURL", "https://sqs.us-west-2.amazonaws.com"},
+                {"Aws:AccessKey", "test-access-key"},
+                {"Aws:SecretKey", "test-secret-key"}
+            };
+
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(inMemorySettings)
+                .Build();
+
+            var configBuilderMock = new MockConfigurationBuilder(configuration);
+            
+            return configBuilderMock;
+        }
+
         // Mock ConfigurationBuilder to simulate the behavior of loading from JSON files
-        private class MockConfigurationBuilder : IConfigurationBuilder
+        internal class MockConfigurationBuilder : IConfigurationBuilder
         {
             private readonly IConfigurationRoot _configuration;
 
