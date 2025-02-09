@@ -2,8 +2,8 @@
 using WorkerService.DTOs;
 
 namespace WorkerService.Handlers {
-    public interface IPedidoHandler
+    public interface IPagamentoHandler
     {
-        Task ProcessarPedidoAsync(MensagemPedidoDto mensagem);
+        Task ProcessarAsync(MensagemPagamentoDto mensagem);
     }
 }

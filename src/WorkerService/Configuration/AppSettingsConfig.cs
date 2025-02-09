@@ -12,8 +12,8 @@ public class AppSettingsConfig
 
 #pragma warning disable CS8601 // Possible null reference assignment.
         var AwsConfig = new AwsConfig(){
-            QueueName = configuration["Aws:QueueName"],
-            DlqQueueName = configuration["Aws:DlqQueueName"],
+            QueueURL = configuration["Aws:QueueURL"],
+            DlqQueueURL = configuration["Aws:DlqQueueURL"],
             RegionEndpoint = configuration["Aws:RegionEndpoint"],
             ServiceURL = configuration["Aws:ServiceURL"],
             AccessKey = configuration["Aws:AccessKey"],
@@ -34,6 +34,6 @@ public class AwsConfig
     public string AccessKey { get; set; }  = String.Empty;
     public string SecretKey { get; set; }  = String.Empty;
     public string ServiceURL { get; set; }  = String.Empty;
-    public string QueueName { get; set; } = String.Empty;
-    public string DlqQueueName { get; set; }  = String.Empty;
+    public string QueueURL { get; set; } = String.Empty;
+    public string DlqQueueURL { get; set; }  = String.Empty;
 }

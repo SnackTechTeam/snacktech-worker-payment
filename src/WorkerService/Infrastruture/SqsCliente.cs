@@ -30,7 +30,7 @@ public class SqsClient : ISqsClient
         var request = new ReceiveMessageRequest
         {
             QueueUrl = queueUrl,
-            MaxNumberOfMessages = 10 // Adjust as needed
+            MaxNumberOfMessages = 10
         };
 
         return await _sqsClient.ReceiveMessageAsync(request);

@@ -1,5 +1,3 @@
-using WorkerService.Enums;
-
 namespace WorkerService.Data.Entities;
 
 public class Pedido

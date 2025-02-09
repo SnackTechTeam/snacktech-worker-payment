@@ -3,37 +3,49 @@ using WorkerService.Data.Repository;
 using WorkerService.DTOs;
 
 namespace WorkerService.Handlers {
-    public class PedidoHandler : IPedidoHandler
+    public class PagamentoHandler : IPagamentoHandler
     {
-        private readonly ILogger<PedidoHandler> logger;
         private readonly IPedidoRepository pedidoRepository;
+        public const int STATUS_AGUARDANDO_PAGAMENTO = 2;
+        public const int STATUS_PAGAMENTO_REALIZADO = 3;
 
-        public PedidoHandler(ILogger<PedidoHandler> logger, IPedidoRepository pedidoRepository)
+        public PagamentoHandler(IPedidoRepository pedidoRepository)
         {
-            this.logger = logger;
             this.pedidoRepository = pedidoRepository;
         }
 
-        public async Task ProcessarPedidoAsync(MensagemPedidoDto mensagem)
+        public async Task ProcessarAsync(MensagemPagamentoDto mensagem)
         {
             Pedido? pedido = await pedidoRepository.GetByIdAsync(mensagem.PedidoId);
+            ValidarPreCondicoes(mensagem, pedido);
 
+            pedido!.Status = STATUS_PAGAMENTO_REALIZADO;
+            pedido.PagamentoId = mensagem.PagamentoId;
+
+            await pedidoRepository.UpdateAsync(pedido);
+        }
+
+        private static void ValidarPreCondicoes(MensagemPagamentoDto mensagem, Pedido? pedido)
+        {
             if (pedido == null)
             {
                 throw new InvalidOperationException($"Pedido com ID {mensagem.PedidoId} não encontrado.");
             }
 
-            // TODO: trocar numero magico
-            if (pedido.Status != 2)
+            if (pedido.Status != STATUS_AGUARDANDO_PAGAMENTO)
             {
                 throw new InvalidOperationException($"Pedido com ID {mensagem.PedidoId} não está aguardando pagamento.");
             }
-            
-            // TODO: trocar numero magico
-            pedido.Status = 3;
-            pedido.PagamentoId = mensagem.PagamentoId;
 
-            await pedidoRepository.UpdateAsync(pedido);
+            if (pedido.PagamentoId != null && pedido.PagamentoId != mensagem.PagamentoId)
+            {
+                throw new InvalidOperationException($"Pedido com ID {mensagem.PedidoId} já possui um pagamento.");
+            }
+
+            if (mensagem.DataRecebimento < pedido.DataCriacao)
+            {
+                throw new InvalidOperationException($"Pedido com ID {mensagem.PedidoId} foi criado depois do pagamento.");
+            }
         }
     }
 }

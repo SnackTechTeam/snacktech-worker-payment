@@ -29,47 +29,47 @@ namespace WorkerService
         {
             using var scope = _serviceProvider.CreateScope();
             var services = scope.ServiceProvider;
-            var handler = services.GetService<IPedidoHandler>();
+            var handler = services.GetService<IPagamentoHandler>();
 
             while (!stoppingToken.IsCancellationRequested)
             {
                 
-                var response = await _sqsClient.ReceiveMessageAsync(_config.Aws.QueueName);
+                var response = await _sqsClient.ReceiveMessageAsync(_config.Aws.QueueURL);
 
                 foreach (var message in response.Messages)
                 {
-                    _logger.LogDebug("Processing message {messageId}", message?.MessageId);
+                    _logger.LogDebug("Processando mensagem com id: {messageId}", message?.MessageId);
 
                     try
                     {
-                        var mensagemPedidoDto = JsonSerializer.Deserialize<MensagemPedidoDto>(message!.Body);
-                        if(mensagemPedidoDto == null)
+                        var mensagemDto = JsonSerializer.Deserialize<MensagemPagamentoDto>(message!.Body);
+                        if(mensagemDto == null)
                         {
-                            throw new JsonException("Invalid message body");
+                            throw new JsonException("Erro ao deserializar mensagem");
                         }
 
-                        await handler!.ProcessarPedidoAsync(mensagemPedidoDto);
-                        _logger.LogDebug("Message {messageId} processed with body: {body}", message?.MessageId, message?.Body);
+                        await handler!.ProcessarAsync(mensagemDto);
+                        _logger.LogDebug("Mensagem processada com sucesso com id: {messageId} e body: {body}", message?.MessageId, message?.Body);
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Error processing message {messageId} with body: {body}", message?.MessageId, message?.Body);
+                        _logger.LogError(ex, "Erro ao processar mensagem com id: {messageId} e body: {body}", message?.MessageId, message?.Body);
                         
                         if (message != null){
-                            await _sqsClient.SendMessageAsync(_config.Aws.DlqQueueName, message.Body);
-                            _logger.LogWarning("Message {messageId} sent to DLQ {queueDlq}", message.MessageId, _config.Aws.DlqQueueName);
+                            await _sqsClient.SendMessageAsync(_config.Aws.DlqQueueURL, message.Body);
+                            _logger.LogWarning("Mensagem com id: {messageId} enviada para DLQ {dlqQueueURL}", message.MessageId, _config.Aws.DlqQueueURL);
                         }
                     }
                     finally
                     {
                         if (message != null){
-                            await _sqsClient.DeleteMessageAsync(_config.Aws.QueueName, message);
-                            _logger.LogDebug("Message {messageId} deleted from queue {queue}", message.MessageId, _config.Aws.QueueName);
+                            await _sqsClient.DeleteMessageAsync(_config.Aws.QueueURL, message);
+                            _logger.LogDebug("Mensagem com id: {messageId} deletada da fila {queueURL}", message.MessageId, _config.Aws.QueueURL);
                         }
                     }
                 }
 
-                _logger.LogDebug("Waiting for messages...");
+                _logger.LogDebug("Aguardando novas mensagens...");
                 await Task.Delay(5000);
             }
 

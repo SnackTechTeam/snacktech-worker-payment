@@ -1,5 +1,5 @@
 namespace WorkerService.DTOs;
-public class MensagemPedidoDto
+public class MensagemPagamentoDto
 {
     public Guid PedidoId { get; set; } = default!;
     public Guid PagamentoId { get; set; } = default!;

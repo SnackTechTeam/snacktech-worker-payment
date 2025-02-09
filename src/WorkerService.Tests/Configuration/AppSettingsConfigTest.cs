@@ -12,8 +12,8 @@ namespace WorkerService.Configuration.Tests
         {
             // Arrange
             var inMemorySettings = new Dictionary<string, string> {
-                {"Aws:QueueName", "queue"},
-                {"Aws:DlqQueueName", "dlq"},
+                {"Aws:QueueURL", "queue.com"},
+                {"Aws:DlqQueueURL", "dlq.com"},
                 {"Aws:RegionEndpoint", "us-west-2"},
                 {"Aws:ServiceURL", "https://sqs.us-west-2.amazonaws.com"},
                 {"Aws:AccessKey", "test-access-key"},
@@ -32,8 +32,8 @@ namespace WorkerService.Configuration.Tests
             // Assert
             Assert.NotNull(appSettingsConfig);
             Assert.NotNull(appSettingsConfig.Aws);
-            Assert.Equal("queue", appSettingsConfig.Aws.QueueName);
-            Assert.Equal("dlq", appSettingsConfig.Aws.DlqQueueName);
+            Assert.Equal("queue.com", appSettingsConfig.Aws.QueueURL);
+            Assert.Equal("dlq.com", appSettingsConfig.Aws.DlqQueueURL);
             Assert.Equal("us-west-2", appSettingsConfig.Aws.RegionEndpoint);
             Assert.Equal("https://sqs.us-west-2.amazonaws.com", appSettingsConfig.Aws.ServiceURL);
             Assert.Equal("test-access-key", appSettingsConfig.Aws.AccessKey);
