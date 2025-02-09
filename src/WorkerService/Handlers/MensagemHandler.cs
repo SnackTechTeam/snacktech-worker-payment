@@ -10,10 +10,10 @@ namespace WorkerService.Handlers
     {
         private readonly ILogger<MensagemHandler> logger;
         private readonly IPagamentoHandler handler;
-        private readonly SqsClient sqsClient;
+        private readonly ISqsClient sqsClient;
         private readonly AppSettingsConfig config;
 
-        public MensagemHandler(ILogger<MensagemHandler> logger, IPagamentoHandler handler, SqsClient sqsClient, AppSettingsConfig config)
+        public MensagemHandler(ILogger<MensagemHandler> logger, IPagamentoHandler handler, ISqsClient sqsClient, AppSettingsConfig config)
         {
             this.logger = logger;
             this.handler = handler;
