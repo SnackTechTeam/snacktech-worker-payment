@@ -14,7 +14,7 @@ public class SqsClient : ISqsClient
         _sqsClient = sqsClient;
     }
 
-    public async Task SendMessageAsync(string queueUrl, string messageBody)
+    public virtual async Task SendMessageAsync(string queueUrl, string messageBody)
     {
         var request = new SendMessageRequest
         {
@@ -36,7 +36,7 @@ public class SqsClient : ISqsClient
         return await _sqsClient.ReceiveMessageAsync(request);
     }
 
-    public async Task DeleteMessageAsync(string queueUrl, Message message)
+    public virtual async Task DeleteMessageAsync(string queueUrl, Message message)
     {
         await _sqsClient.DeleteMessageAsync(new DeleteMessageRequest
         {

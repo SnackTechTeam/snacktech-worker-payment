@@ -17,11 +17,11 @@ Console.WriteLine("ConnectionString: " + builder.Configuration.GetConnectionStri
 builder.Services.AddDbContext<PedidoContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DatabaseConnection")));
 
-
 builder.Services.AddSingleton(config);
+builder.Services.AddSingleton<ISqsClient, SqsClient>();
 builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 builder.Services.AddScoped<IPagamentoHandler, PagamentoHandler>();
-builder.Services.AddSingleton<ISqsClient, SqsClient>();
+builder.Services.AddScoped<IMensagemHandler, MensagemHandler>();
 
 builder.Services.AddSingleton<IAmazonSQS>(serviceProvider =>
 {
