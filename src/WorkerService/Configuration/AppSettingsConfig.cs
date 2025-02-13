@@ -14,7 +14,6 @@ public class AppSettingsConfig
         var AwsConfig = new AwsConfig(){
             QueueURL = configuration["Aws:QueueURL"],
             DlqQueueURL = configuration["Aws:DlqQueueURL"],
-            RegionEndpoint = configuration["Aws:RegionEndpoint"],
             ServiceURL = configuration["Aws:ServiceURL"],
             AccessKey = configuration["Aws:AccessKey"],
             SecretKey = configuration["Aws:SecretKey"]
@@ -30,7 +29,6 @@ public class AppSettingsConfig
 
 public class AwsConfig 
 {
-    public string RegionEndpoint { get; set; }  = String.Empty;
     public string AccessKey { get; set; }  = String.Empty;
     public string SecretKey { get; set; }  = String.Empty;
     public string ServiceURL { get; set; }  = String.Empty;

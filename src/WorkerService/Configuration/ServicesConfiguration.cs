@@ -35,9 +35,7 @@ public static class ServiceConfigurationExtensions
         {
             var configSqs = new AmazonSQSConfig
             {
-                RegionEndpoint = RegionEndpoint.GetBySystemName(config.Aws.RegionEndpoint),
-                ServiceURL = config.Aws.ServiceURL,
-                UseHttp = true
+                ServiceURL = config.Aws.ServiceURL
             };
             return new AmazonSQSClient(config.Aws.AccessKey, config.Aws.SecretKey, configSqs);
         });
