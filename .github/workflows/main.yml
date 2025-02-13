@@ -100,7 +100,7 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ecr-${{ vars.PROJECT_NAME }}-worker-pagamento
+          ECR_REPOSITORY: ecr-${{ vars.PROJECT_NAME }}-worker-payment
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build -f src/WorkerService/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG src/WorkerService
