@@ -161,7 +161,7 @@ jobs:
         env:
           IMAGE_URI: ${{ steps.build-image.outputs.image }}
         run: |
-          yq e '.spec.template.spec.containers[0].image = "'"$IMAGE_URI"'"' -i k8s/01-orders-api-deployment.yaml || { echo "Error updating ecr_image_url_repo_tag value"; exit 1; }
+          yq e '.spec.template.spec.containers[0].image = "'"$IMAGE_URI"'"' -i k8s/01-payment-worker-deployment.yaml || { echo "Error updating ecr_image_url_repo_tag value"; exit 1; }
       
       - name: Deploy to EKS
         run: |
