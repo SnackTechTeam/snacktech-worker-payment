@@ -134,7 +134,7 @@ jobs:
           fi
       
           kubectl create secret generic "$SECRET_NAME"  \
-            --from-literal=ConnectionStrings__DefaultConnection="$CONNECTION_STRING" \
+            --from-literal=ConnectionStrings__DatabaseConnection="$CONNECTION_STRING" \
             --from-literal=AWS__AccessKey="$AWS_ACCESS_KEY_ID" \
             --from-literal=AWS__SecretKey="$AWS_SECRET_ACCESS_KEY"
     
