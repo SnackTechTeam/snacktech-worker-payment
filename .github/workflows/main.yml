@@ -125,6 +125,7 @@ jobs:
           DB_PORT: ${{ vars.DB_PORT }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_TOKEN: ${{ secrets.AWS_SECRET_ACCESS_TOKEN }}
         run: |
           SECRET_NAME="worker-payment-secret"
           CONNECTION_STRING="Server=${{ env.DB_INSTANCE_PEDIDOS }},${{ env.DB_PORT }};Database=SnackTechProductsDb;User=${{ env.DB_UID_PEDIDOS }};Password=${{ env.DB_PASSWORD_PEDIDOS }};TrustServerCertificate=True"
@@ -136,7 +137,8 @@ jobs:
           kubectl create secret generic "$SECRET_NAME"  \
             --from-literal=ConnectionStrings__DatabaseConnection="$CONNECTION_STRING" \
             --from-literal=AWS__AccessKey="$AWS_ACCESS_KEY_ID" \
-            --from-literal=AWS__SecretKey="$AWS_SECRET_ACCESS_KEY"
+            --from-literal=AWS__SecretKey="$AWS_SECRET_ACCESS_KEY" \
+            --from-literal=AWS__SecretToken="$AWS_SECRET_ACCESS_TOKEN"
     
       - name: Create/Update configmap
         env:

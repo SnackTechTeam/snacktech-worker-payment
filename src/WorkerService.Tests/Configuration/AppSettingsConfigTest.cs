@@ -24,6 +24,7 @@ namespace WorkerService.Configuration.Tests
             Assert.Equal("https://sqs.us-west-2.amazonaws.com", appSettingsConfig.Aws.ServiceURL);
             Assert.Equal("test-access-key", appSettingsConfig.Aws.AccessKey);
             Assert.Equal("test-secret-key", appSettingsConfig.Aws.SecretKey);
+            Assert.Equal("test-secret-token", appSettingsConfig.Aws.SecretToken);
         }
 
         internal static MockConfigurationBuilder MakeConfigBuilderMock()
@@ -33,7 +34,8 @@ namespace WorkerService.Configuration.Tests
                 {"Aws:DlqQueueURL", "dlq.com"},
                 {"Aws:ServiceURL", "https://sqs.us-west-2.amazonaws.com"},
                 {"Aws:AccessKey", "test-access-key"},
-                {"Aws:SecretKey", "test-secret-key"}
+                {"Aws:SecretKey", "test-secret-key"},
+                {"Aws:SecretToken", "test-secret-token"}
             };
 
             var configuration = new ConfigurationBuilder()

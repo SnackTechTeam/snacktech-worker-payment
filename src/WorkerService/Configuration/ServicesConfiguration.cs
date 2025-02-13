@@ -37,7 +37,7 @@ public static class ServiceConfigurationExtensions
             {
                 ServiceURL = config.Aws.ServiceURL
             };
-            return new AmazonSQSClient(config.Aws.AccessKey, config.Aws.SecretKey, configSqs);
+            return new AmazonSQSClient(config.Aws.AccessKey, config.Aws.SecretKey, config.Aws.SecretToken, configSqs);
         });
 
         return builder;

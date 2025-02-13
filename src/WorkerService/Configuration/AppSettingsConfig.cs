@@ -16,7 +16,8 @@ public class AppSettingsConfig
             DlqQueueURL = configuration["Aws:DlqQueueURL"],
             ServiceURL = configuration["Aws:ServiceURL"],
             AccessKey = configuration["Aws:AccessKey"],
-            SecretKey = configuration["Aws:SecretKey"]
+            SecretKey = configuration["Aws:SecretKey"],
+            SecretToken = configuration["Aws:SecretToken"]
         };
 #pragma warning restore CS8601 // Possible null reference assignment.
 
@@ -31,6 +32,7 @@ public class AwsConfig
 {
     public string AccessKey { get; set; }  = String.Empty;
     public string SecretKey { get; set; }  = String.Empty;
+    public string SecretToken { get; set; }  = String.Empty;
     public string ServiceURL { get; set; }  = String.Empty;
     public string QueueURL { get; set; } = String.Empty;
     public string DlqQueueURL { get; set; }  = String.Empty;
