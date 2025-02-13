@@ -103,7 +103,7 @@ jobs:
           ECR_REPOSITORY: ecr-${{ vars.PROJECT_NAME }}-worker-pagamento
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker build -f src/WorkerService/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG src
+          docker build -f src/WorkerService/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG src/WorkerService
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
         
