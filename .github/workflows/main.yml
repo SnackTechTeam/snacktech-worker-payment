@@ -155,7 +155,7 @@ jobs:
           kubectl create configmap "$CONFIGMAP_NAME" \
             --from-literal=AWS__QueueUrl="https://sqs.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ACCOUNT_ID_VOCLABS }}/${{ env.SQS_QUEUE_PAYMENT_NAME }}" \
             --from-literal=AWS__DlqQueueURL="https://sqs.${{ env.AWS_REGION }}.amazonaws.com/${{ env.AWS_ACCOUNT_ID_VOCLABS }}/${{ env.SQS_QUEUE_PAYMENT_DLQ_NAME }}" \
-            --from-literal=AWS__ServiceUrl="https://sqs.${{ env.AWS_REGION }}.amazonaws.com" /
+            --from-literal=AWS__ServiceUrl="https://sqs.${{ env.AWS_REGION }}.amazonaws.com" 
           
       - name: Replace ECR image string value
         env:
