@@ -33,7 +33,7 @@ namespace WorkerService.Tests.Data.Context
             using var context = new PedidoContext(options);
 
             // Assert
-            Assert.NotNull(context.Pedidos);
+            Assert.NotNull(context.Pedido);
         }
 
         [Fact]
@@ -49,11 +49,11 @@ namespace WorkerService.Tests.Data.Context
             var pedido = new Pedido { Id = Guid.NewGuid() };
 
             // Act
-            context.Pedidos.Add(pedido);
+            context.Pedido.Add(pedido);
             await context.SaveChangesAsync();
 
             // Assert
-            Assert.Equal(1, context.Pedidos.Count());
+            Assert.Equal(1, context.Pedido.Count());
         }
     }
 }

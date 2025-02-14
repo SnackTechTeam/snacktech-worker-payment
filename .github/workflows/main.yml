@@ -128,7 +128,7 @@ jobs:
           AWS_SECRET_ACCESS_TOKEN: ${{ secrets.AWS_SECRET_ACCESS_TOKEN }}
         run: |
           SECRET_NAME="worker-payment-secret"
-          CONNECTION_STRING="Server=${{ env.DB_INSTANCE_PEDIDOS }},${{ env.DB_PORT }};Database=SnackTechProductsDb;User=${{ env.DB_UID_PEDIDOS }};Password=${{ env.DB_PASSWORD_PEDIDOS }};TrustServerCertificate=True"
+          CONNECTION_STRING="Server=${{ env.DB_INSTANCE_PEDIDOS }},${{ env.DB_PORT }};Database=SnackTechOrdersDb;User=${{ env.DB_UID_PEDIDOS }};Password=${{ env.DB_PASSWORD_PEDIDOS }};TrustServerCertificate=True"
       
           if kubectl get secret "$SECRET_NAME" > /dev/null 2>&1; then
             kubectl delete secret "$SECRET_NAME" 

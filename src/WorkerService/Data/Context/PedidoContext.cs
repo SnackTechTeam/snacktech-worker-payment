@@ -12,6 +12,6 @@ namespace WorkerService.Data
         }
 
         // Define a DbSet for the Pedido entity
-        public virtual DbSet<Pedido> Pedidos { get; set; }
+        public virtual DbSet<Pedido> Pedido { get; set; }
     }
 }
