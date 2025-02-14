@@ -43,7 +43,7 @@ namespace WorkerService.Handlers {
                 return false;
             }
 
-            if (pedido.PagamentoId != null && pedido.PagamentoId != mensagem.PagamentoId)
+            if (pedido.PagamentoId != null && pedido.PagamentoId != Guid.Empty && pedido.PagamentoId != mensagem.PagamentoId)
             {
                 logger.LogError("Pedido com ID {pedidoId} já possui um pagamento.", mensagem.PedidoId);
                 return false;
