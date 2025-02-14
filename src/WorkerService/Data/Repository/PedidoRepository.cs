@@ -13,12 +13,12 @@ namespace WorkerService.Data.Repository
 
         public async Task<Pedido?> GetByIdAsync(Guid pedidoId)
         {
-            return await context.Pedidos.FindAsync(pedidoId);
+            return await context.Pedido.FindAsync(pedidoId);
         }
 
         public async Task UpdateAsync(Pedido pedido)
         {
-            context.Pedidos.Update(pedido);
+            context.Pedido.Update(pedido);
             await context.SaveChangesAsync();
         }
     }

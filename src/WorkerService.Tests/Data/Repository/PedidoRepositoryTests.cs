@@ -17,7 +17,7 @@ namespace WorkerService.Tests.Data.Repository
             _pedidoDbSetMock = new Mock<DbSet<Pedido>>();
             var contextOptions = new DbContextOptions<PedidoContext>();
             _contextMock = new Mock<PedidoContext>(contextOptions);
-            _contextMock.Setup(c => c.Pedidos).Returns(_pedidoDbSetMock.Object);
+            _contextMock.Setup(c => c.Pedido).Returns(_pedidoDbSetMock.Object);
             _repository = new PedidoRepository(_contextMock.Object);
         }
 
