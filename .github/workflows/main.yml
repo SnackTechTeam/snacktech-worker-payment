@@ -75,6 +75,7 @@ jobs:
         if [ ${{ steps.coverage.outputs.coverage_percentage }} -lt 90 ]; then
           echo "Coverage percentage is less than 90%!"
           exit 1
+        fi
 
   deploy:
     name: Deploy
