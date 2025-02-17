@@ -68,6 +68,12 @@ jobs:
         echo "Coverage Percentage: $coverage_percentage%"
         echo "coverage_percentage=$coverage_percentage" >> $GITHUB_OUTPUT
 
+    - name: Upload Coverage Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: CoverageReport
+        path: ./CoverageReport
+
     - name: Print Coverage Percentage and validate minimum coverage
       run: |
         echo "Coverage Percentage: ${{ steps.coverage.outputs.coverage_percentage }}%"
