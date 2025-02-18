@@ -76,3 +76,7 @@ A aplicação conta com 2 tipos de testes:
 
 Este repositório possui um pipeline configurado para executar o build da aplicação e execução de testes unitários e analise de vulnerabilidades com Sonarqube. 
 Como resultado de um PR aprovado para a branch main, é desencadeado o processo de deploy para uma infraestrutura de EKS previamente configurada nas variaveis de ambiente.
+
+## Cobertura de testes automatizados
+
+![Cobertura de teste](./cobertura.png)
