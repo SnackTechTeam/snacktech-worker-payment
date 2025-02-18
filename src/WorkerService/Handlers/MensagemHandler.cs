@@ -28,15 +28,7 @@ namespace WorkerService.Handlers
             try
             {
                 var mensagemDto = JsonSerializer.Deserialize<MensagemPagamentoDto>(mensagem.Body);
-                if(mensagemDto == null)
-                {
-                    logger.LogError("Erro ao deserializar mensagem com id: {messageId}", mensagem.MessageId);
-                    await EnviarParaDlq(mensagem);
-                }
-                else
-                {
-                    await ProcessarMensagem(mensagem, mensagemDto);
-                }
+                await ProcessarMensagem(mensagem, mensagemDto);
             }
             catch (Exception ex)
             {
