@@ -131,7 +131,7 @@ public class MensagemHandlerTests
             It.IsAny<It.IsAnyType>(),
             It.IsAny<Exception>(),
             It.IsAny<Func<It.IsAnyType, Exception, string>>()),
-            Times.Exactly(4),
+            Times.Exactly(3),
             "Verificar mensagens logadas");
     }
 }

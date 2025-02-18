@@ -84,5 +84,17 @@ namespace WorkerService.Tests.Handlers
             Assert.Equal(mensagem.PagamentoId, pedido.PagamentoId);
             _pedidoRepositoryMock.Verify(r => r.UpdateAsync(pedido), Times.Once);
         }
+
+        [Fact]
+        public async Task ProcessarAsync_InvalidMessage_PedidoJaPossuiPagamento_ReturnsFalse()
+        {
+            // Arrange
+            var mensagem = new MensagemPagamentoDto { PedidoId = Guid.NewGuid(), DataRecebimento = DateTime.Now, PagamentoId = Guid.NewGuid() };
+            var pedido = new Pedido { Id = mensagem.PedidoId, Status = PagamentoHandler.STATUS_AGUARDANDO_PAGAMENTO, DataCriacao = DateTime.Now.AddDays(-1), PagamentoId = Guid.NewGuid() };
+            _pedidoRepositoryMock.Setup(r => r.GetByIdAsync(mensagem.PedidoId)).ReturnsAsync(pedido);
+
+            // Act and Assert
+            Assert.False(await _pagamentoHandler.ProcessarAsync(mensagem));
+        }
     }
 }
