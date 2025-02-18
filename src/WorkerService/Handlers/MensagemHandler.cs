@@ -28,15 +28,7 @@ namespace WorkerService.Handlers
             try
             {
                 var mensagemDto = JsonSerializer.Deserialize<MensagemPagamentoDto>(mensagem.Body);
-                if(mensagemDto == null)
-                {
-                    logger.LogError("Erro ao deserializar mensagem com id: {messageId}", mensagem.MessageId);
-                    await EnviarParaDlq(mensagem);
-                }
-                else
-                {
-                    await ProcessarMensagem(mensagem, mensagemDto);
-                }
+                await ProcessarMensagem(mensagem, mensagemDto);
             }
             catch (Exception ex)
             {
@@ -46,7 +38,6 @@ namespace WorkerService.Handlers
             finally
             {
                 await sqsClient.DeleteMessageAsync(config.Aws.QueueURL, mensagem);
-                logger.LogDebug("Mensagem com id: {messageId} deletada da fila {queueURL}", mensagem.MessageId, config.Aws.QueueURL);   
             }
         }
 
@@ -55,8 +46,6 @@ namespace WorkerService.Handlers
             var result = await handler!.ProcessarAsync(mensagemDto);
             if (!result)
                 await EnviarParaDlq(mensagem);
-            else
-                logger.LogDebug("Mensagem processada com sucesso com id: {messageId} e body: {body}", mensagem?.MessageId, mensagem?.Body);
         }
 
         private async Task EnviarParaDlq(Message mensagem)

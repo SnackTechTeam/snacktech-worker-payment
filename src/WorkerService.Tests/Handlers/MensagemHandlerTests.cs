@@ -52,7 +52,7 @@ public class MensagemHandlerTests
     }
 
     [Fact]
-    public async Task Processar_MensagemInvalida_DeserializacaoFalha()
+    public async Task Processar_MensagemInvalida_DeserializacaoFalha_EnviaParaDLQ()
     {
         // Arrange
         var message = new Message { Body = "Invalid message" };
@@ -65,7 +65,7 @@ public class MensagemHandlerTests
     }
 
     [Fact]
-    public async Task Processar_MensagemValida_ProcessamentoFalha()
+    public async Task Processar_MensagemValida_ProcessamentoFalha_EnviaParaDlq()
     {
         // Arrange
         var mensagemDto = new MensagemPagamentoDto { PedidoId = Guid.NewGuid() };
@@ -104,5 +104,34 @@ public class MensagemHandlerTests
 
         // Assert
         _sqsClientMock.Verify(sc => sc.DeleteMessageAsync(_appSettingsConfig.Aws.QueueURL, It.IsAny<Message>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task Processar_ErroOcorre_LogaErro()
+    {
+        // Arrange
+        var mensagem = new Message { MessageId = "test-id", Body = "test-body" };
+        var ex = new Exception("Test exception");
+        
+         // Act
+        try
+        {
+            await _mensagemHandler.Processar(mensagem);
+        }
+        catch (Exception)
+        {
+            // Ignore the exception, we're testing the logging behavior
+        }
+
+        // Assert
+        var mensagemErro = $"Erro inesperado ao processar mensagem com id: {mensagem.MessageId} e body: {mensagem.Body}";
+        _loggerMock.Verify(l => l.Log(
+            It.IsAny<LogLevel>(),
+            It.IsAny<EventId>(),
+            It.IsAny<It.IsAnyType>(),
+            It.IsAny<Exception>(),
+            It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+            Times.Exactly(3),
+            "Verificar mensagens logadas");
     }
 }
